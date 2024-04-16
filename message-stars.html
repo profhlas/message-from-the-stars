@@ -1,0 +1,134 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Message from the stars</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    #board { display: flex; }
+	.letters { text-align: center; }
+	.letter { display: inline-block; line-height: 3em; height: 3em; width: 2em; border: 1px solid grey; margin-right: 0.5em;}
+	.green { color: green; }
+	.black { color: black; }
+	.red   { color: red; }
+</style>
+</head>
+
+<body>
+<h1>Message from the Stars</h1>
+
+<div id="board">
+	<div id="trust">
+		<h2>Trust (+1)</h2>
+		<p>+1 for each</p>
+		<p>1 green; 2 red/black</p>
+		<p class="letters">
+			<span class="letter">&nbsp;</span>
+			<span class="letter">&nbsp;</span>
+			<span class="letter">&nbsp;</span>
+		</p>
+	</div>
+	<div id="trust">
+		<h2>Amplify (×2)</h2>
+		<p>×2 for each</p>
+		<p>1 green; 1 red/black</p>
+		<p class="letters">
+			<span class="letter">&nbsp;</span>
+			<span class="letter">&nbsp;</span>
+		</p>
+	</div>
+	<div id="trust">
+		<h2>Suspicion (&ndash;)</h2>
+		<p>negative if present</p>
+		<p>1 green/red/black</p>
+		<p class="letters">
+			<span class="letter">&nbsp;</span>
+		</p>
+	</div>
+</div>
+<p>* at most one red overall</p>
+<button onclick="APP.randomize()">Randomize</button> <button>Edit mode</button>
+
+<!--
+Player boards - https://www.dropbox.com/scl/fi/879zcma2vq8o9b0gtb5br/AMftS-working-Player-Consoles-alien-BA.jpg?rlkey=x8bi7uahwlanlhx33ubn2ex1n&dl=0 
+-->
+<script>
+var APP = APP || {};
+
+APP.green =["A", "E", "I", "L", "N", "O", "R", "S", "T"];
+APP.black = ["B", "C", "D", "F", "G", "H", "M", "P", "U", "W", "Y"];
+APP.red = ["J", "K", "Q", "V", "X", "Z"];
+
+Math.randomBetween = function (min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
+// randomize the order of an array
+APP.shuffle = function (array) {
+    "use strict";
+    var rand = 0;
+    var i = 0;
+
+    // https://blog.codinghorror.com/the-danger-of-naivete/
+    for (i = array.length - 1; i > 0; i--) {
+        rand = Math.randomBetween(0, i);
+        [array[i], array[rand]] = 
+            [array[rand], array[i]];
+    }
+
+    return array;
+};
+
+APP.randomize = function () {
+	"use strict";
+	var letters = document.body.querySelectorAll(".letter");
+	var temp = [];
+	var chosen = [];
+	var letter = "";
+	
+	
+	APP.shuffle(APP.green);
+	APP.shuffle(APP.black);
+	APP.shuffle(APP.red);
+	
+	// temp = non-greens
+	// max black: 4 (2, 1, 1)
+	// max red: 1
+	temp.push(APP.black[0], APP.black[1], APP.black[2], APP.black[3]);
+	temp.push(APP.red[0]);
+	APP.shuffle(temp);
+	
+	// choose trust
+	chosen.push(APP.green[0]);
+	chosen.push(temp.pop());
+	chosen.push(temp.pop());
+	
+	// choise amplify
+	chosen.push(APP.green[1]);
+	chosen.push(temp.pop());
+	
+	// choose suspicion by mixining in some greens
+	temp.push(APP.green[2]);
+	APP.shuffle(temp);
+	chosen.push(temp.pop());
+	
+	// update UI
+	letters.forEach(function (tag, index) {
+		tag.classList.remove("green", "black", "red");
+		
+		letter = chosen[index];
+		tag.innerHTML = letter;
+		
+		if (APP.green.includes(letter)) {
+			tag.classList.add("green");
+		} else if (APP.black.includes(letter)) {
+			tag.classList.add("black");
+		} else {
+			tag.classList.add("red");
+		}
+	});
+	
+};
+</script>
+</body>
+</html>
