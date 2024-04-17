@@ -1,4 +1,4 @@
-Calculator for the game *Message from the Stars*
+Calculator for the game *A Message from the Stars*
 
 Can also randomize the cipher for the alien player.
 
