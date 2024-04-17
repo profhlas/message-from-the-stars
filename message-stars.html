@@ -5,9 +5,13 @@
 <title>Message from the stars</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-    #board { display: flex; }
-	.letters { text-align: center; }
-	.letter { display: inline-block; line-height: 3em; height: 3em; width: 2em; border: 1px solid grey; margin-right: 0.5em;}
+    body { font-family: Helvetica, sans-serif; ;width: 40em; margin-left: auto; margin-right: auto; }
+    #board { display: flex; content-justify: center; }
+	#board div { flex-grow: 1; }
+	#board div h2+p { margin-top: -1em; }
+	#clue { display: inline-block; width: 10em; border: 1px solid grey; }
+	.letters {  }
+	.letter { display: inline-block; line-height: 3em; height: 3em; width: 2em; border: 1px solid grey; margin-right: 0.5em; font-weight: bold; text-align: center; }
 	.green { color: green; }
 	.black { color: black; }
 	.red   { color: red; }
@@ -17,37 +21,36 @@
 <body>
 <h1>Message from the Stars</h1>
 
+<div id="">Clue: <span id="clue" oninput="APP.updateScore();" contenteditable="true"></span> 
+	Score: <span id="score"></span>
+</div>
 <div id="board">
 	<div id="trust">
 		<h2>Trust (+1)</h2>
 		<p>+1 for each</p>
-		<p>1 green; 2 red/black</p>
 		<p class="letters">
-			<span class="letter">&nbsp;</span>
-			<span class="letter">&nbsp;</span>
-			<span class="letter">&nbsp;</span>
+			<span class="letter"></span>
+			<span class="letter"></span>
+			<span class="letter"></span>
 		</p>
 	</div>
 	<div id="trust">
 		<h2>Amplify (×2)</h2>
 		<p>×2 for each</p>
-		<p>1 green; 1 red/black</p>
 		<p class="letters">
-			<span class="letter">&nbsp;</span>
-			<span class="letter">&nbsp;</span>
+			<span class="letter"></span>
+			<span class="letter"></span>
 		</p>
 	</div>
 	<div id="trust">
 		<h2>Suspicion (&ndash;)</h2>
 		<p>negative if present</p>
-		<p>1 green/red/black</p>
 		<p class="letters">
-			<span class="letter">&nbsp;</span>
+			<span class="letter"></span>
 		</p>
 	</div>
 </div>
-<p>* at most one red overall</p>
-<button onclick="APP.randomize()">Randomize</button> <button>Edit mode</button>
+<button onclick="APP.randomize()">Randomize cipher</button> <button>Edit cipher</button>
 
 <!--
 Player boards - https://www.dropbox.com/scl/fi/879zcma2vq8o9b0gtb5br/AMftS-working-Player-Consoles-alien-BA.jpg?rlkey=x8bi7uahwlanlhx33ubn2ex1n&dl=0 
@@ -55,11 +58,12 @@ Player boards - https://www.dropbox.com/scl/fi/879zcma2vq8o9b0gtb5br/AMftS-worki
 <script>
 var APP = APP || {};
 
-APP.green =["A", "E", "I", "L", "N", "O", "R", "S", "T"];
+APP.green = ["A", "E", "I", "L", "N", "O", "R", "S", "T"];
 APP.black = ["B", "C", "D", "F", "G", "H", "M", "P", "U", "W", "Y"];
-APP.red = ["J", "K", "Q", "V", "X", "Z"];
+APP.red   = ["J", "K", "Q", "V", "X", "Z"];
 
 Math.randomBetween = function (min, max) {
+	"use strict";
     return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
@@ -79,7 +83,115 @@ APP.shuffle = function (array) {
     return array;
 };
 
+
+APP.updateScore = function () {
+	"use strict";
+	var clueLetters = document.getElementById("clue").innerHTML.toUpperCase().split("");
+	var cipher = [];
+	var temp = [];
+	var negativeBit = false;
+	var total = 0;
+	
+	if (cipher === null) {
+		return;
+	}
+	
+	document.querySelectorAll(".letter").forEach(function (tag) {
+		cipher.push(tag.innerHTML);
+	});
+	
+	// check +1 letters
+	temp = cipher.slice(0, 3);
+	clueLetters.forEach(function (letter) {
+		if (temp.includes(letter)) {
+			total += 1;
+		}
+	});
+	
+	// check x2 letters
+	temp = cipher.slice(3, 5);
+	clueLetters.forEach(function (letter) {
+		if (temp.includes(letter)) {
+			total *= 2;
+		}
+	});
+	
+	// check - letters
+	temp = cipher.slice(5);
+	clueLetters.forEach(function (letter) {
+		if (temp.includes(letter)) {
+			negativeBit = true;
+		}
+	});
+	
+	if (negativeBit) {
+		total *= -1;
+	}
+	
+	document.getElementById("score").innerHTML = total;
+};
+
+
 APP.randomize = function () {
+	"use strict";
+	var letters = document.body.querySelectorAll(".letter");
+	var temp = [];
+	var chosen = [];
+	var letter = "";
+	
+	
+	APP.shuffle(APP.green);
+	APP.shuffle(APP.black);
+	APP.shuffle(APP.red);
+	
+	// note: red possible added later
+	
+	// choose trust
+	chosen.push(APP.green[0]);
+	chosen.push(APP.black[0]);
+	chosen.push(APP.black[1]);
+	
+	// choose amplify
+	chosen.push(APP.green[1]);
+	chosen.push(APP.black[2]);
+	
+	// choose suspicion by mixining in some greens
+	temp = APP.green.slice(2);
+	temp.concat(APP.black.slice(3))
+	APP.shuffle(temp);
+	chosen.push(temp.shift());
+	
+	// possibly add red
+	if (Math.random() <= 6/17) { // chance of red in trust, first spit
+		chosen[1] = APP.red[0];
+	} else if (Math.random() <= 6/16) { // chance of red in trust, 2nd spot
+		chosen[2] = APP.red[0];
+	} else if (Math.random() <= 6/15) { // chance of red in amplify
+		chosen[4] = APP.red[0];
+	} else if (Math.random() <= 6/(26-5)) { // chance of red in suspicion
+		chosen[5] = APP.red[0];
+	}
+	
+	// update UI
+	letters.forEach(function (tag, index) {
+		tag.classList.remove("green", "black", "red");
+		
+		letter = chosen[index];
+		tag.innerHTML = letter;
+		
+		if (APP.green.includes(letter)) {
+			tag.classList.add("green");
+		} else if (APP.black.includes(letter)) {
+			tag.classList.add("black");
+		} else {
+			tag.classList.add("red");
+		}
+	});
+	
+	APP.updateScore();
+};
+
+APP.randomize_v1 = function () {
 	"use strict";
 	var letters = document.body.querySelectorAll(".letter");
 	var temp = [];
@@ -103,7 +215,7 @@ APP.randomize = function () {
 	chosen.push(temp.pop());
 	chosen.push(temp.pop());
 	
-	// choise amplify
+	// choose amplify
 	chosen.push(APP.green[1]);
 	chosen.push(temp.pop());
 	
