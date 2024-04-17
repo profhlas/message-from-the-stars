@@ -17,10 +17,8 @@
 	.black { color: black; }
 	.red   { color: red; }
 	@media (orientation: portrait) {
-	    body {
-	        width: initial;
-	    }
-	     #board { flex-direction: column; }
+	    body { width: initial; margin-left: 1em; }
+	    #board { flex-direction: column; }
 	}
 </style>
 </head>
@@ -96,7 +94,6 @@ APP.updateScore = function () {
 	var clueLetters = document.getElementById("clue").innerHTML.toUpperCase().split("");
 	var cipher = [];
 	var temp = [];
-	var negativeBit = false;
 	var total = 0;
 	
 	if (cipher === null) {
@@ -126,14 +123,10 @@ APP.updateScore = function () {
 	// check - letters
 	temp = cipher.slice(5);
 	clueLetters.forEach(function (letter) {
-		if (temp.includes(letter)) {
-			negativeBit = true;
+		if (temp.includes(letter) && total > 0) {
+			total *= -1;
 		}
 	});
-	
-	if (negativeBit) {
-		total *= -1;
-	}
 	
 	document.getElementById("score").innerHTML = total;
 };
