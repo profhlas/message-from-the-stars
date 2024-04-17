@@ -35,29 +35,29 @@
 		<h2>Trust (+1)</h2>
 		<p>+1 for each</p>
 		<p class="letters">
-			<span class="letter"> </span>
-			<span class="letter"> </span>
-			<span class="letter"> </span>
+			<span class="letter"></span>
+			<span class="letter"></span>
+			<span class="letter"></span>
 		</p>
 	</div>
 	<div id="trust">
 		<h2>Amplify (&times;2)</h2>
 		<p>&times;2 for each</p>
 		<p class="letters">
-			<span class="letter"> </span>
-			<span class="letter"> </span>
+			<span class="letter"></span>
+			<span class="letter"></span>
 		</p>
 	</div>
 	<div id="trust">
 		<h2>Suspicion (&ndash;)</h2>
 		<p>negative if present</p>
 		<p class="letters">
-			<span class="letter"> </span>
+			<span class="letter"></span>
 		</p>
 	</div>
 </div>
 <div>
-    <button onclick="APP.randomize()">Randomize cipher</button> 
+    <button onclick="APP.randomCipher()">Randomize cipher</button> 
     <button id="editButton" onclick="APP.toggleEditable()">Edit cipher</button>
 </div>
 
@@ -181,14 +181,27 @@ APP.updateScore = function () {
 };
 
 
-APP.randomize = function () {
+APP.randomCipher = function () {
 	"use strict";
 	var letters = document.body.querySelectorAll(".letter");
-	var temp = [];
+	var temp; // for various temporary tasks
 	var rand = 0;
 	var chosen = [];
 	var letter = "";
 	
+    letters.forEach(function (tag) {
+        if (tag.innerHTML) {
+            temp = true; // at least one cipher letter is full
+        }
+    });
+
+    if (temp) {
+        if(!confirm("Are you sure you want to make a new cipher?")) {
+            return;
+        }
+    }
+
+    temp = null;
 	
 	APP.shuffle(APP.green);
 	APP.shuffle(APP.black);
