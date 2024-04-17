@@ -136,6 +136,7 @@ APP.randomize = function () {
 	"use strict";
 	var letters = document.body.querySelectorAll(".letter");
 	var temp = [];
+	var rand = 0;
 	var chosen = [];
 	var letter = "";
 	
@@ -161,31 +162,20 @@ APP.randomize = function () {
 	APP.shuffle(temp);
 	chosen.push(temp.shift());
 	
-	// possibly add red; changes temp from array to number
-	if (Math.random() <= 6/26) {
-		temp = Math.random();
+	// possibly add red
+	if (Math.random() <= 0.33) {
+		rand = Math.random();
 
-		if (temp <= 0.25) {
+		if (rand <= 0.25) {
 			chosen[1] = APP.red[0];
-		} else if (temp <= 0.5) {
+		} else if (rand <= 0.5) {
 			chosen[2] = APP.red[0];
-		} else if (temp <= 0.75) {
+		} else if (rand <= 0.75) {
 			chosen[4] = APP.red[0];
 		} else {
 			chosen[5] = APP.red[0];
 		}
 	}
-
-	/* left to right method
-	if (Math.random() <= 6/17) { // chance of red in trust, first spit
-		chosen[1] = APP.red[0];
-	} else if (Math.random() <= 6/16) { // chance of red in trust, 2nd spot
-		chosen[2] = APP.red[0];
-	} else if (Math.random() <= 6/15) { // chance of red in amplify
-		chosen[4] = APP.red[0];
-	} else if (Math.random() <= 6/(26-5)) { // chance of red in suspicion
-		chosen[5] = APP.red[0];
-	} */
 	
 	// update UI
 	letters.forEach(function (tag, index) {
@@ -206,56 +196,6 @@ APP.randomize = function () {
 	APP.updateScore();
 };
 
-APP.randomize_v1 = function () {
-	"use strict";
-	var letters = document.body.querySelectorAll(".letter");
-	var temp = [];
-	var chosen = [];
-	var letter = "";
-	
-	
-	APP.shuffle(APP.green);
-	APP.shuffle(APP.black);
-	APP.shuffle(APP.red);
-	
-	// temp = non-greens
-	// max black: 4 (2, 1, 1)
-	// max red: 1
-	temp.push(APP.black[0], APP.black[1], APP.black[2], APP.black[3]);
-	temp.push(APP.red[0]);
-	APP.shuffle(temp);
-	
-	// choose trust
-	chosen.push(APP.green[0]);
-	chosen.push(temp.pop());
-	chosen.push(temp.pop());
-	
-	// choose amplify
-	chosen.push(APP.green[1]);
-	chosen.push(temp.pop());
-	
-	// choose suspicion by mixining in some greens
-	temp.push(APP.green[2]);
-	APP.shuffle(temp);
-	chosen.push(temp.pop());
-	
-	// update UI
-	letters.forEach(function (tag, index) {
-		tag.classList.remove("green", "black", "red");
-		
-		letter = chosen[index];
-		tag.innerHTML = letter;
-		
-		if (APP.green.includes(letter)) {
-			tag.classList.add("green");
-		} else if (APP.black.includes(letter)) {
-			tag.classList.add("black");
-		} else {
-			tag.classList.add("red");
-		}
-	});
-	
-};
 </script>
 </body>
 </html>
