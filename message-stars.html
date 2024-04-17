@@ -10,7 +10,7 @@
     #board { display: flex; content-justify: center; }
 	#board div { flex-grow: 1; }
 	#board div h2+p { margin-top: -1em; }
-	#clue { display: inline-block; width: 10em; border: 1px solid grey; }
+	#clue { display: inline-block; width: 10em; border: 1px solid grey; padding: 2px; vertical-align: bottom; }
 	.letters {  }
 	.letter { display: inline-block; line-height: 3em; height: 3em; width: 2em; border: 1px solid grey; margin-right: 0.5em; font-weight: bold; text-align: center; }
 	.green { color: green; }
@@ -26,7 +26,7 @@
 <body>
 <h1>Message from the Stars</h1>
 
-<div id="">Clue: <span id="clue" oninput="APP.updateScore();" contenteditable="true"></span> 
+<div>Clue: <span id="clue" oninput="APP.updateScore();" contenteditable="true"></span> 
 	Score: <span id="score"></span>
 </div>
 <div id="board">
