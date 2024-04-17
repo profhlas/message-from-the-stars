@@ -161,7 +161,22 @@ APP.randomize = function () {
 	APP.shuffle(temp);
 	chosen.push(temp.shift());
 	
-	// possibly add red
+	// possibly add red; changes temp from array to number
+	if (Math.random() <= 6/26) {
+		temp = Math.random();
+
+		if (temp <= 0.25) {
+			chosen[1] = APP.red[0];
+		} else if (temp <= 0.5) {
+			chosen[2] = APP.red[0];
+		} else if (temp <= 0.75) {
+			chosen[4] = APP.red[0];
+		} else {
+			chosen[5] = APP.red[0];
+		}
+	}
+
+	/* left to right method
 	if (Math.random() <= 6/17) { // chance of red in trust, first spit
 		chosen[1] = APP.red[0];
 	} else if (Math.random() <= 6/16) { // chance of red in trust, 2nd spot
@@ -170,7 +185,7 @@ APP.randomize = function () {
 		chosen[4] = APP.red[0];
 	} else if (Math.random() <= 6/(26-5)) { // chance of red in suspicion
 		chosen[5] = APP.red[0];
-	}
+	} */
 	
 	// update UI
 	letters.forEach(function (tag, index) {
