@@ -17,8 +17,8 @@
 	.black { color: black; }
 	.red   { color: red; }
 	@media (orientation: portrait) {
-	    body { width: initial; margin-left: 1em; }
-	    #board { flex-direction: column; }
+		body { width: initial; margin-left: 1em; }
+		#board { flex-direction: column; }
 	}
 </style>
 </head>
@@ -155,7 +155,7 @@ APP.randomize = function () {
 	chosen.push(APP.green[1]);
 	chosen.push(APP.black[2]);
 	
-	// choose suspicion by mixining in some greens
+	// choose suspicion by mixing in remaining greens
 	temp = APP.green.slice(2);
 	temp.concat(APP.black.slice(3))
 	APP.shuffle(temp);
