@@ -5,7 +5,8 @@
 <title>Message from the stars</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-    body { font-family: Helvetica, sans-serif; ;width: 40em; margin-left: auto; margin-right: auto; }
+    body { font-family: Helvetica, sans-serif; ;width: 40em; margin: 1em; margin-left: auto; margin-right: auto; }
+    h1 { margin-top: 0; padding-top: 0; }
     #board { display: flex; content-justify: center; }
 	#board div { flex-grow: 1; }
 	#board div h2+p { margin-top: -1em; }
@@ -15,6 +16,12 @@
 	.green { color: green; }
 	.black { color: black; }
 	.red   { color: red; }
+	@media (orientation: portrait) {
+	    body {
+	        width: initial;
+	    }
+	     #board { flex-direction: column; }
+	}
 </style>
 </head>
 
