@@ -130,7 +130,7 @@ APP.toggleEditable = function () {
     }
 
     letters.forEach(function (item) {
-        item.innerHTML = item.innerHTML.toUpperCase();
+        item.innerHTML = item.innerHTML.toUpperCase().trim();
         item.contentEditable = editable;
     });
 
@@ -213,7 +213,7 @@ APP.randomize = function () {
 	chosen.push(temp.shift());
 	
 	// possibly add red
-	if (Math.random() <= 0.33) {
+	if (Math.random() <= 0.80) {
 		rand = Math.random();
 
 		if (rand <= 0.25) {
