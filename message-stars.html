@@ -12,7 +12,7 @@
 	#board div h2+p { margin-top: -1em; }
 	#clue { display: inline-block; width: 10em; border: 1px solid grey; padding: 2px; vertical-align: bottom; }
 	.letters {  }
-	.letter { display: inline-block; line-height: 3em; height: 3em; width: 2em; border: 1px solid grey; margin-right: 0.5em; font-weight: bold; text-align: center; }
+	.letter { display: inline-block; line-height: 3em; height: 3em; width: 2em; border: 1px solid grey; margin-right: 0.5em; font-weight: bold; text-align: center; vertical-align: bottom; }
     .letter[contenteditable="true"] { box-shadow: 0 0 10px green; }
 	.green { color: green; }
 	.black { color: black; }
@@ -108,14 +108,13 @@ APP.updateUI = function () {
 			tag.classList.add("green");
 		} else if (APP.black.includes(letter)) {
 			tag.classList.add("black");
-		} else {
+		} else if (APP.red.includes(letter)) {
 			tag.classList.add("red");
 		}
 	});
 }
 
 
-// this is button
 APP.toggleEditable = function () {
 	"use strict";
     var letters = document.body.querySelectorAll(".letter");
