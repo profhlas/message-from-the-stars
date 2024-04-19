@@ -158,7 +158,7 @@ APP.toggleEditable = function () {
 
 APP.updateScore = function () {
 	"use strict";
-	var clueLetters = document.getElementById("clue").innerHTML.toUpperCase().split("");
+	var clueLetters = document.getElementById("clue").innerHTML.toUpperCase();
 	var cipher = [];
 	var temp = [];
 	var total = 0;
@@ -166,6 +166,12 @@ APP.updateScore = function () {
 	if (clueLetters === null) {
 		return;
 	}
+	
+	// remove whitespace
+	clueLetters = clueLetters.replace(/ /g,"");
+	
+	// break into arrap
+	clueLetters = clueLetters.split("");
 	
 	// create array of letters from the nodelist of tags
 	document.querySelectorAll(".letter").forEach(function (tag) {
@@ -191,7 +197,7 @@ APP.updateScore = function () {
 	// check - letters
 	temp = cipher.slice(5);
 	clueLetters.forEach(function (letter) {
-		if (temp.includes(letter) && total > 0) {
+		if (temp.includes(letter) && letter != " " && total > 0) {
 			total *= -1;
 		}
 	});
