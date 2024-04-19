@@ -168,8 +168,8 @@ APP.updateScore = function () {
 	}
 	
 	// remove whitespace
-	clueLetters = clueLetters.replace(/ /g,"");
-	
+	clueLetters = clueLetters.replace(/ /g,"").replace(/\&nbsp\;/gi, "");
+
 	// break into arrap
 	clueLetters = clueLetters.split("");
 	
