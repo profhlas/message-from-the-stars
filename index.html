@@ -252,7 +252,7 @@ APP.randomCipher = function () {
 	
 	// choose suspicion by mixing in remaining greens
 	temp = APP.green.slice(2);
-	temp.concat(APP.black.slice(3));
+	temp = temp.concat(APP.black.slice(3));
 	APP.shuffle(temp);
 	chosen.push(temp.shift());
 	
