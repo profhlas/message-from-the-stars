@@ -105,13 +105,22 @@ APP.shuffle = function (array) {
 APP.updateUI = function () {
     "use strict";
     var letters = document.body.querySelectorAll(".letter");
+    var cipher = [];
     var letter = "";
 	var i = 0;
 
 	// clear warnings
+    
+    if (sessionStorage.cipher) {
+        cipher = JSON.parse(sessionStorage.cipher);
+    }
 	document.getElementById("warning").innerHTML = "";
 
 	letters.forEach(function (tag, index) {
+        if (cipher.length >= index) {
+            tag.innerHTML = cipher[index];
+        }
+        
 		tag.classList.remove("green", "black", "red");
 		
 		letter = tag.innerHTML;
@@ -140,6 +149,7 @@ APP.updateUI = function () {
 APP.toggleEditable = function () {
 	"use strict";
     var letters = document.body.querySelectorAll(".letter");
+    var cipher = [];
     var editable = false;
 
     if (document.getElementById("editButton").innerHTML === "Edit cipher") { // edit mode
@@ -153,7 +163,14 @@ APP.toggleEditable = function () {
     letters.forEach(function (item) {
         item.innerHTML = item.innerHTML.toUpperCase().trim();
         item.contentEditable = editable;
+        cipher.push(item.innerHTML);
     });
+    
+    if (!editable) {
+        // save cipher as string
+        sessionStorage.cipher = JSON.stringify(cipher);
+    }
+    
 
     APP.updateUI();
     APP.updateScore();
@@ -239,7 +256,7 @@ APP.randomCipher = function () {
 	APP.shuffle(APP.black);
 	APP.shuffle(APP.red);
 	
-	// note: red possible added later
+	// note: possible RED added later
 	
 	// choose trust
 	chosen.push(APP.green[0]);
@@ -271,14 +288,12 @@ APP.randomCipher = function () {
 		}
 	}
 	
-    letters.forEach(function (tag, index) {
-        tag.innerHTML = chosen[index];
-    });
-	
+    // save cipher as string
+    sessionStorage.cipher = JSON.stringify(chosen);
+    
 	APP.updateUI();
 	APP.updateScore();
 };
-
 </script>
 </body>
 </html>
