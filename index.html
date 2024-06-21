@@ -113,8 +113,13 @@ APP.updateUI = function () {
 	// clear warnings
     document.getElementById("warning").innerHTML = "";
     
+	// check for existing cipher
     if (sessionStorage.cipher) {
         cipher = JSON.parse(sessionStorage.cipher);
+		
+		cipher.forEach(function (letter, index) {
+			letters[index].innerHTML = letter;
+		});
     }
     
 
@@ -143,8 +148,6 @@ APP.updateUI = function () {
 		}
         document.getElementById("warning").innerHTML = warnings;
 	});
-
-
 }
 
 
