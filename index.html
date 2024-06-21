@@ -107,17 +107,19 @@ APP.updateUI = function () {
     var letters = document.body.querySelectorAll(".letter");
     var cipher = [];
     var letter = "";
+    var warnings = "";
 	var i = 0;
 
 	// clear warnings
+    document.getElementById("warning").innerHTML = "";
     
     if (sessionStorage.cipher) {
         cipher = JSON.parse(sessionStorage.cipher);
     }
-	document.getElementById("warning").innerHTML = "";
+    
 
 	letters.forEach(function (tag, index) {
-        if (cipher.length >= index) {
+        if (cipher.length > index) {
             tag.innerHTML = cipher[index];
         }
         
@@ -135,11 +137,11 @@ APP.updateUI = function () {
 
 		// check for repeated letters
 		for (i = index + 1; i < letters.length; i += 1) {
-			if (letters[i].innerHTML === letter &&
-				letter) {
-				document.getElementById("warning").innerHTML = "Please check that two letters are not repeated in the cipher."
+			if (letters[i].innerHTML === letter) {
+				warnings = "Please check that two letters are not repeated in the cipher.<br>"
 			}
 		}
+        document.getElementById("warning").innerHTML = warnings;
 	});
 
 
@@ -170,7 +172,6 @@ APP.toggleEditable = function () {
         // save cipher as string
         sessionStorage.cipher = JSON.stringify(cipher);
     }
-    
 
     APP.updateUI();
     APP.updateScore();
