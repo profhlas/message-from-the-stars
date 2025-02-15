@@ -151,7 +151,10 @@ APP.toggleEditable = function () {
     }
 
     letters.forEach(function (item) {
-        item.innerHTML = item.innerHTML.toUpperCase().trim();
+        item.innerHTML = item.innerHTML
+			.replace(/<(.*?)>/, "")
+			.toUpperCase()
+			.trim();
         item.contentEditable = editable;
     });
 
@@ -179,7 +182,7 @@ APP.updateScore = function () {
 
 	// break into array
 	clueLetters = clueLetters.split("");
-	
+
 	// create array of letters from the nodelist of tags
 	document.querySelectorAll(".letter").forEach(function (tag) {
 		cipher.push(tag.innerHTML);
