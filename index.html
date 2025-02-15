@@ -151,10 +151,7 @@ APP.toggleEditable = function () {
     }
 
     letters.forEach(function (item) {
-        item.innerHTML = item.innerHTML
-			.replace(/<(.*?)>/, "")
-			.toUpperCase()
-			.trim();
+        item.innerHTML = item.innerHTML.toUpperCase().trim();
         item.contentEditable = editable;
     });
 
@@ -178,7 +175,7 @@ APP.updateScore = function () {
 	clueLetters = clueLetters.
 	    replace(/\s/g,"").
 	    replace(/\&nbsp\;/gi, "").
-		replace(/<br>/gi, "");
+		replace(/<.*?>/gi, "");
 
 	// break into array
 	clueLetters = clueLetters.split("");
