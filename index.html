@@ -132,9 +132,7 @@ APP.updateUI = function () {
 			}
 		}
 	});
-
-
-}
+};
 
 
 APP.toggleEditable = function () {
@@ -257,18 +255,25 @@ APP.randomCipher = function () {
 	chosen.push(temp.shift());
 	
 	// possibly add red
-	if (Math.random() <= 0.80) {
-		rand = Math.random();
-
-		if (rand <= 0.25) {
-			chosen[1] = APP.red[0];
-		} else if (rand <= 0.5) {
-			chosen[2] = APP.red[0];
-		} else if (rand <= 0.75) {
-			chosen[4] = APP.red[0];
-		} else {
-			chosen[5] = APP.red[0];
-		}
+	// values from https://boardgamegeek.com/thread/3347123/how-many-possible-ciphers
+	// trust has red: 760,320
+	// amplify has red: 380,160
+	// suspicion has red: 213,840
+	// no reds: 534,600
+	// total: 1,888,920
+	rand = Math.random();
+	if (rand < 32/159) { 
+		// trust 1, half of trust / total
+		chosen[1] = APP.red[0];
+	} else if (rand < 64/159) { 
+		// trust 2, trust / total
+		chosen[2] = APP.red[0];
+	} else if (rand < 96/159) { 
+		// amplify, (trust + amplify)/total
+		chosen[4] = APP.red[0];
+	} else if (rand < 114/159) { 
+		// suspicion, (trust + amplify + suspicion)/total
+		chosen[5] = APP.red[0];
 	}
 	
     letters.forEach(function (tag, index) {
